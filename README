@@ -1,0 +1,60 @@
+XRB was inspired by XHP ( http://github.com/facebook/xhp/ ).
+XRB is a Rails Engine to be used.
+
+Having used XHP intensively, I saw the benefits of XML literals as first class
+elements in a programming language.  The biggest benefit was that you could
+easily build large libraries of components to reuse on many sites.
+
+As I was unable to figure out how to add XML literals into the Ruby parser.
+I thought I would start with a more Ruby approach.
+
+Installation
+============
+
+Edit Your Application's Gemfile
+-------------------------------
+
+Add to your Gemfile
+
+    gem 'xrb', :require => 'xrb/engine'
+
+In your ApplicationHelper add
+
+    require UiHelper
+
+Usage
+=====
+
+Inside your template files you can now use XRB.
+
+    <%= ui :image, :block do %>
+      <% ui :link => user_path(user) %>
+        <%= image_tag(user.photo.url(:thumbnail), :title => user %>
+      <% end %>
+      <% ui :group do %>
+        <% ui :link => user_path(user) %>
+          <%= user %>
+        <% end %>
+        <% ui :group do %>
+          <%= user.description %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+
+Defining your own XRB Element
+-----------------------------
+
+Say you want to define an element `user`.
+Inside a helper file we need to add a function:
+
+    def ui_user(xrb)
+      user = xrb.attributes.delete(:user)
+
+      xrb.content = ui_output do
+        content_tag :div, user, xrb.attributes
+      end
+    end
+
+Change the code inside `ui_output` to let design how your component will look
+like.
