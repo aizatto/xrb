@@ -54,7 +54,7 @@ module UiHelper
   def ui_output
     value = yield
 
-    value.html_safe
+    value ?  value.html_safe : ''
   end
 
   def ui_capture(*args, &block)
